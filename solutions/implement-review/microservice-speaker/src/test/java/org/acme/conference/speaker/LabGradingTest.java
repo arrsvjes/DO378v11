@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.not;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -36,14 +37,14 @@ public class LabGradingTest {
     @BeforeAll
     public void setupTests() {
         Jsonb jsonb = JsonbBuilder.create();
-        Speaker speaker1 = createSpeaker("First1", "Last1", "Org1", "Bio1", "Pic1", "Tweet1");
+        Speaker speaker1 = createSpeaker("First1", "Last1", "Org1", "Bio1", "Pic1", "Tweet1", UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f77afa6"));
         speakerStr1 = jsonb.toJson(speaker1);
-        Speaker speaker2 = createSpeaker("First2", "Last2", "Org2", "Bio2", "Pic2", "Tweet2");
+        Speaker speaker2 = createSpeaker("First2", "Last2", "Org2", "Bio2", "Pic2", "Tweet2", UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f77afa7"));
         speakerStr2 = jsonb.toJson(speaker2);
     }
 
     private Speaker createSpeaker(String nameFirst, String nameLast, String organization,
-            String biography, String picture, String twitterHandle) {
+            String biography, String picture, String twitterHandle, UUID uuid) {
         Speaker sp = new Speaker();
         sp.nameFirst = nameFirst;
         sp.nameLast = nameLast;
@@ -51,6 +52,7 @@ public class LabGradingTest {
         sp.biography = biography;
         sp.picture = picture;
         sp.twitterHandle = twitterHandle;
+        sp.uuid = uuid;
         return sp;
     }
 
@@ -212,5 +214,14 @@ public class LabGradingTest {
             .statusCode(200)
             .body("nameFirst[0]", equalTo(toRemain.getNameFirst()))
             .body("$.size()", is(1));
+    }
+    @Test
+    void whenGetBooksByTitle_thenBookShouldBeFound() {
+      given().contentType(ContentType.JSON).param("uuid", "3fa85f64-5717-4562-b3fc-2c963f77afa7")
+        .when().get("/speaker")
+        .then().statusCode(200)
+        //.body("size()", is(1))
+        .body("nameFirst", is("Jesus"))
+        .body("nameLast", is("Arriola"));
     }
 }

@@ -25,8 +25,8 @@ public class SpeakerResource {
     SpeakerService service;
 
     @GET
-    public List<Speaker> listAll() { 
-        return service.listAll();
+    public List<Speaker> list() {
+        return Speaker.listAll();
     }
 
     @GET
@@ -42,8 +42,10 @@ public class SpeakerResource {
     }
     @POST
     @Transactional
-    public Speaker create(Speaker newSpeaker) {
-        service.create(newSpeaker);
+    public Speaker create(final Speaker speaker) {
+        //service.create(newSpeaker);
+        Speaker newSpeaker = Speaker.of(speaker.nameFirst, speaker.nameLast, speaker.organization, speaker.biography, speaker.picture, speaker.twitterHandle, speaker.uuid);
+        newSpeaker.persist();
         return newSpeaker;
     }
     

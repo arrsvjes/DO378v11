@@ -35,10 +35,16 @@ public class Speaker extends PanacheEntity {
         this.uuid = uuid;
     }
 
-    @JsonbCreator
+    //@JsonbCreator
     public Speaker(String nameFirst, String nameLast, String organization,
             String picture, String twitterHandle) {
         this(nameFirst, nameLast, organization, "Empty bio", picture, twitterHandle, UUID.randomUUID());
+    }
+
+    @JsonbCreator
+    public static Speaker of(String nameFirst, String nameLast, String organization,
+    String biography, String picture, String twitterHandle, UUID uuid) { 
+       return new Speaker(nameFirst, nameLast, organization, biography, picture, twitterHandle, uuid);
     }
 
     public UUID getUuid() {
